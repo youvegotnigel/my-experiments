@@ -3,7 +3,6 @@ package javascript;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -59,6 +58,8 @@ public class JavaScriptTests {
 
         //Launching the Site.
         driver.get("http://demo.guru99.com/V4/");
+        System.out.println("Page title is " + driver.getTitle());
+        Assert.assertEquals(driver.getTitle(),"Guru99 Bank Home Page","error title");
 
         WebElement username =driver.findElement(By.name("uid"));
         WebElement password =driver.findElement(By.name("password"));
@@ -87,6 +88,121 @@ public class JavaScriptTests {
         //Thread.sleep(3000);
         System.out.println("Current Url = " + driver.getCurrentUrl());
         Assert.assertEquals(driver.getCurrentUrl(),"http://demo.guru99.com/V4/index.php");
+    }
+
+    @Test
+    public void test_alert_box(){
+        //Creating the JavascriptExecutor interface object by Type casting
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+
+        //Launching the Site.
+        driver.get("https://www.seleniumeasy.com/test/javascript-alert-box-demo.html");
+        System.out.println("Page title is " + driver.getTitle());
+        Assert.assertEquals(driver.getTitle(),"Selenium Easy Demo - Automate All Scenarios","page title not matching");
+
+        WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-default']"));
+
+        //click on the button
+        Assert.assertEquals(button.getText(),"Click me!");
+        button.click();
+
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+
+        Assert.assertEquals(alertText,"I am an alert box!");
+        alert.accept();
+
+    }
+
+    @Test
+    public void test_confirm_box_accept(){
+        //Creating the JavascriptExecutor interface object by Type casting
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+
+        //Launching the Site.
+        driver.get("https://www.seleniumeasy.com/test/javascript-alert-box-demo.html");
+        System.out.println("Page title is " + driver.getTitle());
+        Assert.assertEquals(driver.getTitle(),"Selenium Easy Demo - Automate All Scenarios","page title not matching");
+
+        WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-default btn-lg'][normalize-space()='Click me!']"));
+        WebElement result = driver.findElement(By.xpath("//p[@id='confirm-demo']"));
+
+        //assert button text
+        Assert.assertEquals(button.getText(),"Click me!");
+        button.click();
+
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+
+        Assert.assertEquals(alertText,"Press a button!");
+
+        //Accept alert
+        alert.accept();
+        Assert.assertEquals(result.getText(),"You pressed OK!");
+
+    }
+
+    @Test
+    public void test_confirm_box_reject(){
+        //Creating the JavascriptExecutor interface object by Type casting
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+
+        //Launching the Site.
+        driver.get("https://www.seleniumeasy.com/test/javascript-alert-box-demo.html");
+        System.out.println("Page title is " + driver.getTitle());
+        Assert.assertEquals(driver.getTitle(),"Selenium Easy Demo - Automate All Scenarios","page title not matching");
+
+        WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-default btn-lg'][normalize-space()='Click me!']"));
+        WebElement result = driver.findElement(By.xpath("//p[@id='confirm-demo']"));
+
+        //click on the button
+        Assert.assertEquals(button.getText(),"Click me!");
+        button.click();
+
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+
+        Assert.assertEquals(alertText,"Press a button!");
+
+        //Accept alert
+        alert.dismiss();
+        Assert.assertEquals(result.getText(),"You pressed Cancel!");
+
+    }
+
+    @Test
+    public void test_prompt_box(){
+        //Creating the JavascriptExecutor interface object by Type casting
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+
+        //Launching the Site.
+        driver.get("https://www.seleniumeasy.com/test/javascript-alert-box-demo.html");
+        System.out.println("Page title is " + driver.getTitle());
+        Assert.assertEquals(driver.getTitle(),"Selenium Easy Demo - Automate All Scenarios","page title not matching");
+
+        WebElement button = driver.findElement(By.xpath("//button[normalize-space()='Click for Prompt Box']"));
+        WebElement result = driver.findElement(By.xpath("//p[@id='prompt-demo']"));
+
+        //click on the button
+        Assert.assertEquals(button.getText(),"Click for Prompt Box");
+
+        //Perform click on button using JavascriptExecutor
+        js.executeScript("arguments[0].click();", button);
+
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+
+        Assert.assertEquals(alertText,"Please enter your name");
+
+        String target = "selenium is fun";
+
+        //send the target to alert box
+        alert.sendKeys(target);
+
+        //Accept alert
+        alert.accept();
+        Assert.assertEquals(result.getText(),"You have entered \'" + target + "\' !");
+
     }
 
 
