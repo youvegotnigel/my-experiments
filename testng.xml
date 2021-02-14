@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <test name="No name Test">
+    <test name="Run My Tests">
         <classes>
-            <class name="interviewQuestions.ArraysTest">
-                <methods>
-                    <include name="bubbleSort"/>
-                </methods>
-            </class>
+            <class name="dropdowns.DropDown"></class>
+            <class name="javascript.JavaScriptTests"></class>
+            <class name="performance.PerformanceChromeTest"></class>
         </classes>
     </test>
 </suite>
