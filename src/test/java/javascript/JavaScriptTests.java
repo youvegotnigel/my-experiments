@@ -3,6 +3,8 @@ package javascript;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -19,9 +21,6 @@ public class JavaScriptTests {
 
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-
-        //driver.manage().window().maximize();
-        //driver.get("https://demoqa.com/automation-practice-form");
 
     }
 
@@ -205,6 +204,54 @@ public class JavaScriptTests {
 
     }
 
+    @Test
+    public void scroll_down_test(){
+
+        //Creating the JavascriptExecutor interface object by Type casting
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+
+        //Launching the Site.
+        driver.get("https://the-internet.herokuapp.com/infinite_scroll");
+        System.out.println("Page title is " + driver.getTitle());
+        Assert.assertEquals(driver.getTitle(),"The Internet","page title not matching");
+
+        //Maximize window
+        driver.manage().window().maximize();
+
+        By textBlocks = By.className("jscroll-added");
+
+        //int paragraphCount = driver.findElements(textBlocks).size();
+        int INDEX = 10; //expected paragraph number
+
+
+        //String script = "arguments[0].scrollIntoView(true)";
+        //js.executeScript(script, driver.findElement(rank));
+        //String transformScript = "document.getElementById('field')";
+
+        int count = 0;
+
+        while (getParagraphCount(textBlocks) < INDEX){
+            //System.out.println("Inside while loop : " + count);
+            //System.out.println("Index count : " + INDEX);
+            //System.out.println("Paragraph count : " + getParagraphCount(textBlocks));
+
+            //js.executeScript("window.scrollBy(0,500)");
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+            count++;
+        }
+
+        System.out.println("Loop count : " + count);
+
+    }
+
+    private int getParagraphCount(By elemement){
+        return driver.findElements(elemement).size();
+    }
+
+    public void explicitWaitMethod(By element) {
+        WebDriverWait wait = new WebDriverWait(driver, 30);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+    }
 
     @AfterClass
     public void tearDown(){
