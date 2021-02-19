@@ -87,6 +87,35 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>io.reactivex.rxjava3</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>3.0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <!--            <version>4.0.6</version> bug in timeline-->
+            <version>4.0.6</version>
+            <!--            <version>5.0.0</version> ExtentHtmlReporter deprecated  -->
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+
+        <!-- JavaScriptErrorReporter API 1.00v to maven repo  -->
+        <!--<dependency>-->
+            <!--<groupId>com.github.lkkushan101.JavaErrorReporting</groupId>-->
+            <!--<artifactId>com.github.lkkushan101.JavaErrorReporting</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
+
+
     </dependencies>
 
 
