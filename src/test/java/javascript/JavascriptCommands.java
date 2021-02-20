@@ -133,8 +133,18 @@ public class JavascriptCommands {
     @Test(priority = 7)
     public void testing_session_storage(){
 
+        String itemName = "football";
+        String itemValue = "10";
+
         //Creating the JavascriptExecutor interface object by Type casting
         JavascriptExecutor js = (JavascriptExecutor)driver;
+
+        js.executeScript("window.sessionstorage.setitem(itemName, itemValue)");
+
+
+        String result = (String) js.executeScript(String.format("return window.sessionstorage.getItem('%s');", itemValue));
+
+        System.out.println(result);
 
     }
 
