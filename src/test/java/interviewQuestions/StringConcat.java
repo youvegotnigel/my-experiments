@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class StringConcat {
@@ -39,4 +40,22 @@ public class StringConcat {
         Assert.assertEquals(expected,fixed);
         //Assert.assertEquals(expecte);
     }
+
+    @Test
+    public void convertStringAlphabetically(){
+
+        String str = "nigel";
+
+        //convert string to char array
+        char charArray[] = str.toCharArray();
+
+        //sort string
+        Arrays.sort(charArray);
+
+        //Arrays.toString(charArray);
+
+        System.out.println("\n\nYour cool name : " + new String(charArray));
+
+    }
+
 }
