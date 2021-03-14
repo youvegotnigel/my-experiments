@@ -24,9 +24,9 @@ public class CalendarTest {
 
 
     //Expected Values
-    private static String YEAR = "2024";  //Year has to be a future year
-    private static String MONTH = "February";
-    private static int DATE = 29;
+    private static String YEAR = "2021";  //Year has to be a future year
+    private static String MONTH = "June";
+    private static int DATE = 9;
 
     @BeforeClass
     public void setup() {
@@ -52,23 +52,30 @@ public class CalendarTest {
 
         select_any_month_year_date(YEAR, MONTH, DATE);
 
+        //Click on the date picker
+        driver.findElement(datePicker).click();
+
         printValues();
     }
 
-    //@Test(dependsOnMethods = {"select_a_new_date"})
+    @Test(dependsOnMethods = {"select_a_new_date"})
     public void verify_selected_date() {
+
+        //Click on the date picker
+        driver.findElement(datePicker).click();
 
         SoftAssert softAssert = new SoftAssert();
 
         softAssert.assertEquals(getYear(), YEAR, "Selected year is incorrect");
         softAssert.assertEquals(getMonth(), MONTH, "Selected month is incorrect");
-        //softAssert.assertEquals(get_selected_date(DATE),DATE, "Selected date is incorrect");
+        softAssert.assertEquals(Integer.parseInt(get_selected_date(DATE)),DATE, "Selected date is incorrect");
 
         softAssert.assertAll();
 
     }
 
     public String getMonthYearValue() {
+        explicitWaitMethod(monthYearValue);
         return driver.findElement(monthYearValue).getText();
     }
 
@@ -85,6 +92,7 @@ public class CalendarTest {
         String xpath = "//a[normalize-space()='" + date + "']";
 
         try {
+            explicitWaitMethod(By.xpath(xpath));
             driver.findElement(By.xpath(xpath)).click();
             return driver.findElement(By.xpath(xpath)).getText();
 
@@ -94,7 +102,7 @@ public class CalendarTest {
             //System.out.println(e);
         }
 
-        return null;
+        return "-1";
     }
 
     public void select_any_month_year_date(String year, String month, int date) {
@@ -113,7 +121,7 @@ public class CalendarTest {
             }
 
             get_selected_date(date);
-            verify_selected_date();
+            //verify_selected_date();
         }
 
 
@@ -129,13 +137,13 @@ public class CalendarTest {
     }
 
     public void explicitWaitMethod(By element) {
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
     }
 
     private ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
-        options.setHeadless(true);
+        options.setHeadless(false);
         return options;
     }
 
