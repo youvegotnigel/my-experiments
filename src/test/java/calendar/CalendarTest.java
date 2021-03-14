@@ -12,6 +12,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CalendarTest {
 
     private WebDriver driver;
@@ -23,10 +26,15 @@ public class CalendarTest {
     private By calenderNextButton = By.xpath("//a[@title='Next']");
 
 
-    //Expected Values
-    private static String YEAR = "2021";  //Year has to be a future year
-    private static String MONTH = "June";
-    private static int DATE = 9;
+    //Expected Values dynamic date
+//    private static String YEAR = "2021";  //Year has to be a future year
+//    private static String MONTH = "June";
+//    private static int DATE = 9;
+
+    //Expected Values for current date
+    private String YEAR = getCurrentYear();
+    private String MONTH = getCurrentMonth();
+    private int DATE = getCurrentDate();
 
     @BeforeClass
     public void setup() {
@@ -150,5 +158,35 @@ public class CalendarTest {
     @AfterClass
     public void tearDown() {
         driver.quit();
+    }
+
+    public String getCurrentYear(){
+        Date date = new Date();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+        String strDate = formatter.format(date);
+
+        String year = strDate.split(" ")[2].trim();
+        return year;
+    }
+
+    public String getCurrentMonth(){
+        Date date = new Date();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+        String strDate = formatter.format(date);
+
+        String month = strDate.split(" ")[1].trim();
+        return month;
+    }
+
+    public int getCurrentDate(){
+        Date date = new Date();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+        String strDate = formatter.format(date);
+
+        String temp_date = strDate.split(" ")[0].trim();
+        return Integer.parseInt(temp_date);
     }
 }
