@@ -9,12 +9,23 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 public class CalendarTest {
 
     private WebDriver driver;
+
     private By datePicker = By.id("datepicker");
     private By calendarUI = By.xpath("//div[@id='ui-datepicker-div']");
+    private By monthYearValue = By.xpath("//div[@class='ui-datepicker-title']");
+
+    private By calenderNextButton = By.xpath("//a[@title='Next']");
+
+
+    //Expected Values
+    private static String YEAR = "2024";
+    private static String MONTH = "November";
+    private static int DATE = 2;
 
     @BeforeClass
     public void setup() {
@@ -26,17 +37,72 @@ public class CalendarTest {
     }
 
     @Test
-    public void findCalendar(){
+    public void verify_calender_is_open(){
 
         //Click on the date picker
         driver.findElement(datePicker).click();
 
         //Verify if calender is open
         explicitWaitMethod(calendarUI);
+    }
 
-        //Thread.sleep(5000);
+    @Test(dependsOnMethods = {"verify_calender_is_open"})
+    public void select_a_new_date(){
 
+        select_any_month_year_date(YEAR,MONTH,DATE);
 
+        printValues();
+    }
+
+    @Test(dependsOnMethods = {"select_a_new_date"})
+    public void verify_selected_date(){
+
+        SoftAssert softAssert = new SoftAssert();
+
+        softAssert.assertEquals(getYear(),YEAR, "Selected year is incorrect");
+        softAssert.assertEquals(getMonth(),MONTH, "Selected month is incorrect");
+        //softAssert.assertEquals(get_selected_date(DATE),DATE, "Selected date is incorrect");
+
+        softAssert.assertAll();
+
+    }
+
+    public String  getMonthYearValue(){
+        return driver.findElement(monthYearValue).getText();
+    }
+
+    public String getMonth(){
+        return getMonthYearValue().split(" ")[0].trim();
+    }
+
+    public String getYear(){
+        return getMonthYearValue().split(" ")[1].trim();
+    }
+
+    public String get_selected_date(int date){
+
+        String xpath = "//a[normalize-space()='"+ date +"']";
+
+        driver.findElement(By.xpath(xpath)).click();
+        return  driver.findElement(By.xpath(xpath)).getText();
+    }
+
+    public void select_any_month_year_date(String year, String month, int date){
+        while ( !(getMonth().equals(month) && getYear().equals(year)) ){
+            //Click on next button until condition is true
+            driver.findElement(calenderNextButton).click();
+        }
+
+        get_selected_date(date);
+    }
+
+    public void printValues(){
+
+        //print the month, year and date
+        System.out.println("Month Year Value : " + getMonthYearValue());  //March 2021
+        System.out.println("Month Value : " + getMonth());  //March
+        System.out.println("Year Value : " + getYear());  //2021
+        System.out.println("Date Value : " + get_selected_date(DATE));  //4
     }
 
     public void explicitWaitMethod(By element) {
