@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -23,14 +24,14 @@ public class CalendarTest {
 
 
     //Expected Values
-    private static String YEAR = "2024";
+    private static String YEAR = "2021";
     private static String MONTH = "November";
-    private static int DATE = 2;
+    private static int DATE = 31;
 
     @BeforeClass
     public void setup() {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(getChromeOptions());
         driver.manage().window().maximize();
         driver.get("http://seleniumpractise.blogspot.com/2016/08/how-to-handle-calendar-in-selenium.html");
 
@@ -108,6 +109,12 @@ public class CalendarTest {
     public void explicitWaitMethod(By element) {
         WebDriverWait wait = new WebDriverWait(driver, 30);
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+    }
+
+    private ChromeOptions getChromeOptions(){
+        ChromeOptions options = new ChromeOptions();
+        options.setHeadless(true);
+        return options;
     }
 
     @AfterClass
