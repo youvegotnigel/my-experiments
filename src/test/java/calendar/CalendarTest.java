@@ -24,9 +24,9 @@ public class CalendarTest {
 
 
     //Expected Values
-    private static String YEAR = "2021";
-    private static String MONTH = "November";
-    private static int DATE = 31;
+    private static String YEAR = "2024";  //Year has to be a future year
+    private static String MONTH = "February";
+    private static int DATE = 29;
 
     @BeforeClass
     public void setup() {
@@ -38,7 +38,7 @@ public class CalendarTest {
     }
 
     @Test
-    public void verify_calender_is_open(){
+    public void verify_calender_is_open() {
 
         //Click on the date picker
         driver.findElement(datePicker).click();
@@ -48,56 +48,78 @@ public class CalendarTest {
     }
 
     @Test(dependsOnMethods = {"verify_calender_is_open"})
-    public void select_a_new_date(){
+    public void select_a_new_date() {
 
-        select_any_month_year_date(YEAR,MONTH,DATE);
+        select_any_month_year_date(YEAR, MONTH, DATE);
 
         printValues();
     }
 
-    @Test(dependsOnMethods = {"select_a_new_date"})
-    public void verify_selected_date(){
+    //@Test(dependsOnMethods = {"select_a_new_date"})
+    public void verify_selected_date() {
 
         SoftAssert softAssert = new SoftAssert();
 
-        softAssert.assertEquals(getYear(),YEAR, "Selected year is incorrect");
-        softAssert.assertEquals(getMonth(),MONTH, "Selected month is incorrect");
+        softAssert.assertEquals(getYear(), YEAR, "Selected year is incorrect");
+        softAssert.assertEquals(getMonth(), MONTH, "Selected month is incorrect");
         //softAssert.assertEquals(get_selected_date(DATE),DATE, "Selected date is incorrect");
 
         softAssert.assertAll();
 
     }
 
-    public String  getMonthYearValue(){
+    public String getMonthYearValue() {
         return driver.findElement(monthYearValue).getText();
     }
 
-    public String getMonth(){
+    public String getMonth() {
         return getMonthYearValue().split(" ")[0].trim();
     }
 
-    public String getYear(){
+    public String getYear() {
         return getMonthYearValue().split(" ")[1].trim();
     }
 
-    public String get_selected_date(int date){
+    public String get_selected_date(int date) {
 
-        String xpath = "//a[normalize-space()='"+ date +"']";
+        String xpath = "//a[normalize-space()='" + date + "']";
 
-        driver.findElement(By.xpath(xpath)).click();
-        return  driver.findElement(By.xpath(xpath)).getText();
-    }
+        try {
+            driver.findElement(By.xpath(xpath)).click();
+            return driver.findElement(By.xpath(xpath)).getText();
 
-    public void select_any_month_year_date(String year, String month, int date){
-        while ( !(getMonth().equals(month) && getYear().equals(year)) ){
-            //Click on next button until condition is true
-            driver.findElement(calenderNextButton).click();
+        } catch (Exception e) {
+
+            System.err.println(date + " is an invalid date for " + MONTH + "!! in " + YEAR);
+            //System.out.println(e);
         }
 
-        get_selected_date(date);
+        return null;
     }
 
-    public void printValues(){
+    public void select_any_month_year_date(String year, String month, int date) {
+
+        if (month.equals("February") && date >= 30) {
+            System.err.println(date + " is an invalid date for " + month + "!!");
+            return;
+        } else if (date > 31) {
+            System.err.println(date + " is an invalid date for " + month + "!!");
+            return;
+        } else {
+
+            while (!(getMonth().equals(month) && getYear().equals(year))) {
+                //Click on next button until condition is true
+                driver.findElement(calenderNextButton).click();
+            }
+
+            get_selected_date(date);
+            verify_selected_date();
+        }
+
+
+    }
+
+    public void printValues() {
 
         //print the month, year and date
         System.out.println("Month Year Value : " + getMonthYearValue());  //March 2021
@@ -111,14 +133,14 @@ public class CalendarTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
     }
 
-    private ChromeOptions getChromeOptions(){
+    private ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
         options.setHeadless(true);
         return options;
     }
 
     @AfterClass
-    public void tearDown(){
+    public void tearDown() {
         driver.quit();
     }
 }
