@@ -28,19 +28,19 @@ public class DateTest {
 
     public static int getYear(String strDate){
 
-        String year = strDate.split(" ")[2];
+        String year = strDate.split(" ")[2].trim();
         return Integer.parseInt(year);
     }
 
     public static int getDate(String strDate){
 
-        String date = strDate.split(" ")[0];
+        String date = strDate.split(" ")[0].trim();
         return Integer.parseInt(date);
     }
 
     public static String getMonth(String strDate){
 
-        String month = strDate.split(" ")[1];
+        String month = strDate.split(" ")[1].trim();
         return month;
     }
 
